@@ -1,0 +1,81 @@
+\begin{tikzpicture}[
+  path11/.style={edge from parent/.style={black,thin,draw},circle,draw=black,thin,text=black},
+  path00/.style={edge from parent/.style={black!20,thin,draw},circle,draw=black!20,thin,text=black!20},
+  path00thick/.style={edge from parent/.style={black!20,very thick,draw},circle,draw=black!20,thin,text=black!20},
+  path01/.style={edge from parent/.style={black!20,thin,draw},circle,draw=black,thin,text=black},
+  path02/.style={edge from parent/.style={black!20,thin,draw},circle,draw=red,very thick,text=black},
+  path22/.style={edge from parent/.style={red,very thick,draw},circle,draw=red,very thick,text=black},
+  p1root/.style={path11}, p1/.style={path11},
+  p2root/.style={path11}, p2/.style={path11},
+  p3root/.style={path11}, p3/.style={path11},
+  p4root/.style={path11}, p4/.style={path11},
+  p5root/.style={path11}, p5/.style={path11},
+  p6root/.style={path11}, p6/.style={path11},
+]
+\only<2->{\tikzset{
+  p1root/.style={path22},
+  p1/.style={path22},
+}}
+\only<3->{\tikzset{
+  p1root/.style={path00},
+  p1/.style={path00thick},
+  p2root/.style={path01},
+  p3root/.style={path01},
+  p5root/.style={path01},
+  p6root/.style={path01},
+}}
+\only<4->{\tikzset{
+  p2root/.style={path02},
+  p2/.style={path22},
+}}
+\only<5->{\tikzset{
+  p2root/.style={path00},
+  p2/.style={path00thick},
+}}
+\only<6->{\tikzset{
+  p3root/.style={path02},
+  p3/.style={path22},
+}}
+\only<7->{\tikzset{
+  p3root/.style={path00},
+  p3/.style={path00thick},
+  p4root/.style={path01},
+}}
+\only<8->{\tikzset{
+  p4root/.style={path02},
+  p4/.style={path22},
+}}
+\only<9->{\tikzset{
+  p4root/.style={path00},
+  p4/.style={path00thick},
+}}
+\only<10->{\tikzset{
+  p5root/.style={path02},
+  p5/.style={path22},
+}}
+\only<11->{\tikzset{
+  p5root/.style={path00},
+  p5/.style={path00thick},
+}}
+\only<12->{\tikzset{
+  p6root/.style={path02},
+  p6/.style={path22},
+}}
+\only<13->{\tikzset{
+  p6root/.style={path00},
+  p6/.style={path00thick},
+}}
+\node[circle,draw,p1root](z){$a_1$}
+  child[p1]{node[circle,draw]{$b_1$}
+    child[p5root]{node[circle,draw]{$c_1$}}
+    child[p1]{node[circle,draw]{$c_2$}
+      child[p1]{node[circle,draw]{$d_1$}}
+      child[p6root]{node[circle,draw]{$d_2$}}
+    }
+  }
+  child[p2root]{node[circle,draw]{$b_2$}}
+  child[p3root]{node[circle,draw]{$b_3$}
+    child[p3]{node[circle,draw]{$c_3$}}
+    child[p4root]{node[circle,draw]{$c_4$}}
+  };
+\end{tikzpicture}

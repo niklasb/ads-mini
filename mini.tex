@@ -1,0 +1,243 @@
+\documentclass[ngerman,hyperref={pdfpagelabels=true}]{beamer}
+\usepackage{etex}
+
+% -----------------------------------------------------------------------------
+
+\graphicspath{{img/}}
+
+% -----------------------------------------------------------------------------
+
+\usetheme{KIT}
+
+\setbeamercovered{transparent}
+\setbeamertemplate{enumerate items}[ball]
+
+\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[TS1,T1]{fontenc}
+\usepackage{array}
+\usepackage{multicol}
+\usepackage[absolute,overlay]{textpos}
+\usepackage{beamerKITdefs}
+\usepackage{wrapfig}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{listings}
+\usetikzlibrary{calc,trees,positioning,arrows,chains,shapes.geometric,%
+    decorations.pathreplacing,decorations.pathmorphing,shapes,%
+    matrix,shapes.symbols}
+
+\pdfpageattr {/Group << /S /Transparency /I true /CS /DeviceRGB>>}
+
+
+\pdfpageattr {/Group << /S /Transparency /I true /CS /DeviceRGB>>}
+
+
+\title{Pfadzerlegung zur Kompression von Tries}
+\subtitle{Niklas Baumstark -- \textit{niklas.baumstark@gmail.com}}
+
+
+\author{Niklas Baumstark}
+\institute{ITI-Sanders}
+
+\TitleImage[width=\titleimagewd,height=\titleimageht]{titel.jpg}
+
+\KITinstitute{ITI}
+\KITfaculty{Fakultät für Informatik}
+
+\tikzstyle{vertex}=[circle,minimum size=17pt,inner sep=0pt,draw=black]
+\tikzstyle{small-vertex}=[circle,minimum size=5pt,inner sep=0pt,draw=black]
+\tikzstyle{edge} = [stealth,draw,bend left,thick,in=20,out=20]
+\tikzstyle{weight} = [font=\small]
+\tikzstyle{array-element}=[rectangle, draw=black, minimum size=11.3333pt]
+
+\lstset{
+basicstyle=\ttfamily\small
+}
+
+% ----------------------------------------------------------------------
+\begin{document}
+% ----------------------------------------------------------------------
+
+%\AtBeginSection[]
+%{\frame{\frametitle{Outline}
+%\tableofcontents[currentsection]}}
+
+\setlength\textheight{7cm} %required for correct vertical alignment, if [t] is not used as documentclass parameter
+
+% title frame
+\begin{frame}
+  \maketitle
+\end{frame}
+
+\tikzset{
+>=stealth',
+  punktchain/.style={
+    rectangle,
+    rounded corners,
+    % fill=black!10,
+    draw=black, very thick,
+    text width=10em,
+    minimum height=3em,
+    text centered,
+    on chain},
+  line/.style={draw, thick, <-},
+  element/.style={
+    tape,
+    top color=white,
+    bottom color=blue!50!black!60!,
+    minimum width=8em,
+    draw=blue!40!black!90, very thick,
+    text width=10em,
+    minimum height=3.5em,
+    text centered,
+    on chain},
+  every join/.style={<-, thick,shorten >=1pt},
+  decoration={brace},
+  tuborg/.style={decorate},
+  tubnode/.style={midway, right=2pt},
+}
+
+
+\newcommand\T{\mathcal{T}}
+
+\begin{frame}{Pfadzerlegung}
+\begin{itemize}
+\item Anwendbar auf beliebigen Baum $\T$
+\item Erzeuge neuen Baum $\T^c$. Knoten in $\T^c$ sind Pfade in $\T$
+\item Konstruktion:
+\begin{enumerate}
+\item W"ahle Pfad $p$ von Wurzel zu einem Blatt
+\item Entferne $p$
+\item Berechne rekursiv Dekompositionen $\T^c_1, \T^c_2, \ldots, \T^c_n$ der "ubrigen Teilb"aume,
+geordnet nach Level der Teilbaumwurzel in $T$
+\item $\T^c$ hat Wurzel $p$ mit Kindern $\T^c_1, \ldots, \T^c_n$.
+\end{enumerate}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Pfadzerlegung (Beispiel)}
+
+\begin{columns}[T] % align columns
+\begin{column}{.48\textwidth}
+
+\centering
+$\T$\\[1em]
+%\input{decomp1.tex}
+
+\end{column}%
+\hfill%
+\begin{column}{.48\textwidth}
+
+\centering
+$\T^c$\\[1em]
+%\input{decomp2.tex}
+
+\end{column}%
+\end{columns}
+
+\end{frame}
+
+\begin{frame}{Pfadzerlegung}
+\begin{itemize}
+\item Wie entscheiden, welcher Pfad der n"achste Knoten wird?
+\item Zwei grundlegende Taktiken
+\begin{itemize}
+\item Pfad zu linkestem Blatt im Baum
+\item Folge \emph{schweren Kanten}: Immer in den gr"o"sten Teilbaum absteigen
+$\rightarrow \T^c$ hat Tiefe $\mathcal{O}(\log |\T|)$
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\newcommand{\edgelabel}[2]{edge from parent node[draw=none,#1]{\lstinline|#2|}}
+
+\begin{frame}{Pfadzerlegung eines Tries}
+\begin{itemize}
+\item Betrachte Patricia-Trie mit Knotenlabels
+\end{itemize}
+
+\begin{columns}[T] % align columns
+\begin{column}{.48\textwidth}
+
+\centering
+\begin{tikzpicture}[
+  every node/.style={rectangle,draw,black,text=black,thin,
+    edge from parent/.style={draw,black,thin}},
+]
+\node(z){\lstinline|r|}
+  child{
+    node{\lstinline|om|}
+    child{
+      node{\lstinline|ulus|}
+      \edgelabel{left}{u}
+    }
+    child{node{\lstinline|an|}
+      child{
+        node {\lstinline|e|}
+        \edgelabel{left}{e}
+      }
+      child{
+        node{\lstinline|us|}
+        \edgelabel{right}{u}
+      }
+      \edgelabel{right}{a}
+    }
+    \edgelabel{left}{o}
+  }
+  child{
+    node{\lstinline|emus|}
+    \edgelabel{left}{e}
+  }
+  child{node{\lstinline|ub|}
+    child{
+      node{\lstinline|en|}
+      \edgelabel{left}{e}
+    }
+    child{
+      node{\lstinline|icon|}
+      \edgelabel{right}{i}
+    }
+    \edgelabel{right}{u}
+  };
+\end{tikzpicture}
+
+\end{column}%
+\hfill%
+\begin{column}{.48\textwidth}
+
+\centering
+\begin{tikzpicture}[
+  every node/.style={rectangle,draw,black,text=black,thin,
+    edge from parent/.style={draw,black,thin}},
+]
+\node[rectangle split,rectangle split parts=4, rectangle split horizontal](z){
+  \lstinline|r|
+  \nodepart{two} \lstinline|om|
+  \nodepart{three} \lstinline|an|
+  \nodepart{four} \lstinline|us|
+  }
+  child{
+    node{\lstinline|emus|}
+  }
+  child{
+    node{\lstinline|uben|}
+    child{
+      node{\lstinline|icon|}
+    }
+  }
+  child{
+    node{\lstinline|ulus|}
+  }
+  child{
+    node{\lstinline|us|}
+  }
+  ;
+\end{tikzpicture}
+
+\end{column}
+\end{columns}
+
+\end{frame}
+
+\end{document}

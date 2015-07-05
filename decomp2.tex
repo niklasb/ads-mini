@@ -1,0 +1,57 @@
+\begin{tikzpicture}[
+  inactive/.style={rectangle,draw,black,text=black,thin,
+    edge from parent/.style={draw,black,thin}},
+  active/.style={inactive,draw=red,very thick},
+  invisible/.style={inactive,draw=white,text=white,edge from parent/.style={white}},
+  p1/.style={invisible},
+  p2/.style={invisible},
+  p3/.style={invisible},
+  p4/.style={invisible},
+  p5/.style={invisible},
+  p6/.style={invisible},
+]
+\only<2->{\tikzset{
+  p1/.style={active},
+}}
+\only<3->{\tikzset{
+  p1/.style={inactive},
+}}
+\only<4->{\tikzset{
+  p2/.style={active},
+}}
+\only<5->{\tikzset{
+  p2/.style={inactive},
+}}
+\only<6->{\tikzset{
+  p3/.style={active},
+}}
+\only<7->{\tikzset{
+  p3/.style={inactive},
+}}
+\only<8->{\tikzset{
+  p4/.style={active},
+}}
+\only<9->{\tikzset{
+  p4/.style={inactive},
+}}
+\only<10->{\tikzset{
+  p5/.style={active},
+}}
+\only<11->{\tikzset{
+  p5/.style={inactive},
+}}
+\only<12->{\tikzset{
+  p6/.style={active},
+}}
+\only<13->{\tikzset{
+  p6/.style={inactive},
+}}
+\node[draw,p1](z){$a_1b_1c_2d_1$}
+  child[p2]{node[draw]{$b_2$}}
+  child[p3]{
+    node[draw]{$b_3c_3$}
+    child[p4]{node[draw]{$c_4$}}
+  }
+  child[p5]{node[draw]{$c_1$}}
+  child[p6]{node[draw]{$d_2$}};
+\end{tikzpicture}
