@@ -154,44 +154,47 @@ $\rightarrow \T^c$ hat H"ohe $h = \mathcal{O}(\log |\T|)$
 
 \centering
 \input{trie3.tex}
-
-\[ \begin{array}{llllllllllll}
-L &= &\text{\lstinline|r|} &\text{\textbf{2}}
-     &&\text{\lstinline|om|} &\text{\textbf{1}}
-     &\text{\lstinline|an|} &\text{\textbf{1}}
-     &\text{\lstinline|e|}
-     &&L_{\alpha\ldots \delta} \\
-BP &= &&\text{\lstinline|(|}&\text{\lstinline|(|}
-      &&\text{\lstinline|(|}
-      &&\text{\lstinline|(|}
-      &&\text{\lstinline|)|}
-      &BP_{\alpha\ldots \delta} \\
-B &= &&\text{\lstinline|e|}&\text{\lstinline|u|}
-     &&\text{\lstinline|u|}
-     &&\text{\lstinline|u|}
-     &&&B_{\alpha\ldots \delta}
-\end{array}
-\]
+\input{trie4.tex}
 
 \end{frame}
 
 \begin{frame}{Lookup}
+\centering
+\input{trie3.tex}
+\input{trie4.tex}
+
 \begin{itemize}
 \item Gegeben Zeichenkette $S$, finde Position von $S$ im zerlegten Trie $T^c$
 \item Algorithmus:
 \begin{itemize}
 \item Scanne Label der Wurzel bis zum ersten Mismatch eines branching characters.
 Sei $n$ die Summe vorhergehender Splitter und $m$ der aktuelle Splitter.
-\item Teilb"aume am aktuellen Trennpunkt haben Indizes $n + 1$ bis $n + m$
 \item Bin"arsuche in $B[n+1 \ldots n+m]$, um richtiges Kind zu finden
 \item $i$-tes Kind beginnt bei $\text{\lstinline|FindClose|}(BP, i - 1) + 1$
-\item Setze rekursiv fort
 \end{itemize}
+
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\begin{block}{Lookup}
+\begin{itemize}
 \item Laufzeit $\mathcal{O}\left(|S| + h\log |\Sigma|\right)$
 \item Nur $h$ beliebige Zugriffe auf $L$, ansonsten sequentiell
-%\item Nur sequentieller Zugriff auf Labels notwendig, effizient komprimierbar
-%\item Nur sequentieller Zugriff auf Labels notwendig, effizient komprimierbar
+\item[$\implies$] Sehr effektive Kompression m"oglich
 \end{itemize}
+\end{block}
+
+\begin{block}{Weitere Anwendungen}
+\begin{itemize}
+\item Monotone Minimal Perfect Hashing
+\begin{itemize}
+\item \emph{Blind trie}: Nur branching characters werden gespeichert, keine kompletten Labels
+\item Spezielle Variante von Heavy-Light-Zerlegung die lexikographische Ordnung erh"alt
+\item Laufzeit $\mathcal{O}\left(\min(|S|, h)\right)$
+\end{itemize}
+\end{itemize}
+\end{block}
 \end{frame}
 
 \end{document}
