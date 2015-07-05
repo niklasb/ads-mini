@@ -16,20 +16,16 @@
 \usepackage[utf8]{inputenc}
 \usepackage[TS1,T1]{fontenc}
 \usepackage{array}
-\usepackage{multicol}
 \usepackage[absolute,overlay]{textpos}
 \usepackage{beamerKITdefs}
-\usepackage{wrapfig}
 \usepackage{graphicx}
 \usepackage{tikz}
 \usepackage{listings}
-\usetikzlibrary{calc,trees,positioning,arrows,chains,shapes.geometric,%
-    decorations.pathreplacing,decorations.pathmorphing,shapes,%
-    matrix,shapes.symbols}
+\usepackage[loadonly]{enumitem}
+
+\usetikzlibrary{trees,shapes}
 
 \pdfpageattr {/Group << /S /Transparency /I true /CS /DeviceRGB>>}
-
-
 \pdfpageattr {/Group << /S /Transparency /I true /CS /DeviceRGB>>}
 
 
@@ -44,12 +40,6 @@
 
 \KITinstitute{ITI}
 \KITfaculty{Fakultät für Informatik}
-
-\tikzstyle{vertex}=[circle,minimum size=17pt,inner sep=0pt,draw=black]
-\tikzstyle{small-vertex}=[circle,minimum size=5pt,inner sep=0pt,draw=black]
-\tikzstyle{edge} = [stealth,draw,bend left,thick,in=20,out=20]
-\tikzstyle{weight} = [font=\small]
-\tikzstyle{array-element}=[rectangle, draw=black, minimum size=11.3333pt]
 
 \lstset{
 basicstyle=\ttfamily\small
@@ -69,34 +59,6 @@ basicstyle=\ttfamily\small
 \begin{frame}
   \maketitle
 \end{frame}
-
-\tikzset{
->=stealth',
-  punktchain/.style={
-    rectangle,
-    rounded corners,
-    % fill=black!10,
-    draw=black, very thick,
-    text width=10em,
-    minimum height=3em,
-    text centered,
-    on chain},
-  line/.style={draw, thick, <-},
-  element/.style={
-    tape,
-    top color=white,
-    bottom color=blue!50!black!60!,
-    minimum width=8em,
-    draw=blue!40!black!90, very thick,
-    text width=10em,
-    minimum height=3.5em,
-    text centered,
-    on chain},
-  every join/.style={<-, thick,shorten >=1pt},
-  decoration={brace},
-  tuborg/.style={decorate},
-  tubnode/.style={midway, right=2pt},
-}
 
 
 \newcommand\T{\mathcal{T}}
@@ -123,7 +85,7 @@ geordnet nach Level der Teilbaumwurzel in $T$
 
 \centering
 $\T$\\[1em]
-%\input{decomp1.tex}
+\input{decomp1.tex}
 
 \end{column}%
 \hfill%
@@ -131,7 +93,7 @@ $\T$\\[1em]
 
 \centering
 $\T^c$\\[1em]
-%\input{decomp2.tex}
+\input{decomp2.tex}
 
 \end{column}%
 \end{columns}
@@ -161,83 +123,75 @@ $\rightarrow \T^c$ hat Tiefe $\mathcal{O}(\log |\T|)$
 \begin{column}{.48\textwidth}
 
 \centering
-\begin{tikzpicture}[
-  every node/.style={rectangle,draw,black,text=black,thin,
-    edge from parent/.style={draw,black,thin}},
-]
-\node(z){\lstinline|r|}
-  child{
-    node{\lstinline|om|}
-    child{
-      node{\lstinline|ulus|}
-      \edgelabel{left}{u}
-    }
-    child{node{\lstinline|an|}
-      child{
-        node {\lstinline|e|}
-        \edgelabel{left}{e}
-      }
-      child{
-        node{\lstinline|us|}
-        \edgelabel{right}{u}
-      }
-      \edgelabel{right}{a}
-    }
-    \edgelabel{left}{o}
-  }
-  child{
-    node{\lstinline|emus|}
-    \edgelabel{left}{e}
-  }
-  child{node{\lstinline|ub|}
-    child{
-      node{\lstinline|en|}
-      \edgelabel{left}{e}
-    }
-    child{
-      node{\lstinline|icon|}
-      \edgelabel{right}{i}
-    }
-    \edgelabel{right}{u}
-  };
-\end{tikzpicture}
+\input{trie1.tex}
 
 \end{column}%
 \hfill%
 \begin{column}{.48\textwidth}
 
-\centering
-\begin{tikzpicture}[
-  every node/.style={rectangle,draw,black,text=black,thin,
-    edge from parent/.style={draw,black,thin}},
-]
-\node[rectangle split,rectangle split parts=4, rectangle split horizontal](z){
-  \lstinline|r|
-  \nodepart{two} \lstinline|om|
-  \nodepart{three} \lstinline|an|
-  \nodepart{four} \lstinline|us|
-  }
-  child{
-    node{\lstinline|emus|}
-  }
-  child{
-    node{\lstinline|uben|}
-    child{
-      node{\lstinline|icon|}
-    }
-  }
-  child{
-    node{\lstinline|ulus|}
-  }
-  child{
-    node{\lstinline|us|}
-  }
-  ;
-\end{tikzpicture}
+%\centering
+\input{trie2.tex}
+
+\lstinline|remus| \\
+\lstinline|romane| \\
+\lstinline|romanus| \\
+\lstinline|romulus| \\
+\lstinline|ruben| \\
+\lstinline|rubicon| \\
 
 \end{column}
 \end{columns}
 
+\end{frame}
+
+\begin{frame}{Trie-Repr"asentation}
+
+\begin{itemize}
+
+\item Repr"asentiere Baumstruktur von $T^c$ als \emph{depth-first unary degree sequence} (DFUDS)
+\item F"uge spezielle Splitter-Buchstaben in Knotenlabels ein
+\end{itemize}
+
+\centering
+\input{trie3.tex}
+
+\[ \begin{array}{llllllllllll}
+L &= &\text{\lstinline|r|} &\text{\textbf{2}}
+     &&\text{\lstinline|om|} &\text{\textbf{1}}
+     &\text{\lstinline|an|} &\text{\textbf{1}}
+     &\text{\lstinline|e|}
+     &&L_{\alpha\ldots \delta} \\
+BP &= &&\text{\lstinline|(|}&\text{\lstinline|(|}
+      &&\text{\lstinline|(|}
+      &&\text{\lstinline|(|}
+      &&\text{\lstinline|)|}
+      &BP_{\alpha\ldots \delta} \\
+B &= &&\text{\lstinline|e|}&\text{\lstinline|u|}
+     &&\text{\lstinline|u|}
+     &&\text{\lstinline|u|}
+     &&&B_{\alpha\ldots \delta}
+\end{array}
+\]
+
+\end{frame}
+
+\begin{frame}{Lookup}
+\begin{itemize}
+\item Gegeben Zeichenkette $S$, finde Position von $S$ im zerlegten Trie $T^c$
+\item Algorithmus:
+\begin{itemize}
+\item Scanne Label der Wurzel bis zum ersten Mismatch eines branching characters.
+Sei $n$ die Summe vorhergehender Splitter und $m$ der aktuelle Splitter.
+\item Teilb"aume am aktuellen Trennpunkt haben Indizes $n + 1$ bis $n + m$
+\item Bin"arsuche in $B[n+1 \ldots n+m]$, um richtiges Kind zu finden
+\item $i$-tes Kind beginnt bei $\text{\lstinline|FindClose|}(BP, i - 1) + 1$
+\item Setze rekursiv fort
+\end{itemize}
+\item Laufzeit $\mathcal{O}\left(|S| + h\log |\Sigma|\right)$
+\item Nur $h$ beliebige Zugriffe auf $L$, ansonsten sequentiell
+%\item Nur sequentieller Zugriff auf Labels notwendig, effizient komprimierbar
+%\item Nur sequentieller Zugriff auf Labels notwendig, effizient komprimierbar
+\end{itemize}
 \end{frame}
 
 \end{document}

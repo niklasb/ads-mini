@@ -1,4 +1,4 @@
-mini.pdf: mini.tex decomp1.tex decomp2.tex
+mini.pdf: mini.tex decomp1.tex decomp2.tex trie1.tex trie2.tex trie3.tex
 	latexmk -pdf mini.tex
 
 .PHONY: clean

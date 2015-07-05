@@ -1,0 +1,34 @@
+\begin{tikzpicture}[
+  every node/.style={rectangle,draw,black,text=black,thin},
+  every child/.style={edge from parent/.style={draw=none}, level distance = 1.25cm},
+  noedge/.style={edge from parent/.style={white}},
+  edge/.style={edge from parent/.style={black,thin,draw}},
+  split/.style={rectangle split,rectangle split horizontal},
+  conn/.style={out=270,in=90},
+  subtree/.style={isosceles triangle,shape border rotate=90,yshift=-0.6cm},
+]
+\node[split, rectangle split parts=4](a){
+  \lstinline|r|
+  \nodepart{two} \lstinline|om|
+  \nodepart{three} \lstinline|an|
+  \nodepart{four} \lstinline|e|
+  }
+  child{
+    node[subtree](b){$\alpha$}
+  }
+  child{
+    node[subtree](c){$\beta$}
+  }
+  child{
+    node[subtree](d){$\gamma$}
+  }
+  child{
+    node[subtree](e){$\delta$}
+  }
+  ;
+
+  \draw[conn] (a.one split south) to node [draw=none, midway, above] {\lstinline|e|} (b.north);
+  \draw[conn] (a.one split south) to node [draw=none, midway, right] {\lstinline|u|} (c.north);
+  \draw[conn] (a.two split south) to node [draw=none, midway, below] {\lstinline|u|} (d.north);
+  \draw[conn] (a.three split south) to node [draw=none, midway, above] {\lstinline|u|} (e.north);
+\end{tikzpicture}

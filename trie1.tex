@@ -1,0 +1,41 @@
+\begin{tikzpicture}[
+  every node/.style={rectangle,draw,black,text=black,thin,
+    edge from parent/.style={draw,black,thin}},
+  every child/.style={level distance=1.25cm},
+]
+\node(z){\lstinline|r|}
+  child{
+    node{\lstinline|om|}
+    child{
+      node{\lstinline|ulus|}
+      \edgelabel{left}{u}
+    }
+    child{node{\lstinline|an|}
+      child{
+        node {\lstinline|e|}
+        \edgelabel{left}{e}
+      }
+      child{
+        node{\lstinline|us|}
+        \edgelabel{right}{u}
+      }
+      \edgelabel{right}{a}
+    }
+    \edgelabel{left}{o}
+  }
+  child{
+    node{\lstinline|emus|}
+    \edgelabel{left}{e}
+  }
+  child{node{\lstinline|ub|}
+    child{
+      node{\lstinline|en|}
+      \edgelabel{left}{e}
+    }
+    child{
+      node{\lstinline|icon|}
+      \edgelabel{right}{i}
+    }
+    \edgelabel{right}{u}
+  };
+\end{tikzpicture}

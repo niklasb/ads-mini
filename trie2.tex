@@ -1,0 +1,40 @@
+\begin{tikzpicture}[
+  every node/.style={rectangle,draw,black,text=black,thin},
+  every child/.style={edge from parent/.style={draw=none}, level distance = 1.25cm},
+  noedge/.style={edge from parent/.style={white}},
+  edge/.style={edge from parent/.style={black,thin,draw}},
+  split/.style={rectangle split,rectangle split horizontal},
+  conn/.style={out=270,in=90},
+]
+\node[split, rectangle split parts=4](a){
+  \lstinline|r|
+  \nodepart{two} \lstinline|om|
+  \nodepart{three} \lstinline|an|
+  \nodepart{four} \lstinline|e|
+  }
+  child{
+    node(b){\lstinline|emus|}
+  }
+  child{
+    node[split,rectangle split parts=2](c){
+    \lstinline|ub|
+    \nodepart{two} \lstinline|en|
+    }
+    child{
+      node(f){\lstinline|icon|}
+    }
+  }
+  child{
+    node(d){\lstinline|ulus|}
+  }
+  child{
+    node(e){\lstinline|us|}
+  }
+  ;
+
+  \draw[conn] (a.one split south) to node [draw=none, midway, above] {\lstinline|e|} (b.north);
+  \draw[conn] (a.one split south) to node [draw=none, midway, right] {\lstinline|u|} (c.north);
+  \draw[conn] (a.two split south) to node [draw=none, midway, below] {\lstinline|u|} (d.north);
+  \draw[conn] (a.three split south) to node [draw=none, midway, above] {\lstinline|u|} (e.north);
+  \draw[conn] (c.one split south) to node [draw=none, midway, left] {\lstinline|i|} (f.north);
+\end{tikzpicture}

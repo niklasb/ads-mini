@@ -1,14 +1,17 @@
 \begin{tikzpicture}[
-  inactive/.style={rectangle,draw,black,text=black,thin,
-    edge from parent/.style={draw,black,thin}},
+  every node/.style={draw,rectangle},
+  every child/.style={edge from parent/.style={draw=none}},
+  inactive/.style={black,text=black,thin,edge from parent/.style={draw=none}},
   active/.style={inactive,draw=red,very thick},
-  invisible/.style={inactive,draw=white,text=white,edge from parent/.style={white}},
+  invisible/.style={inactive,text=white,draw=white},
   p1/.style={invisible},
   p2/.style={invisible},
   p3/.style={invisible},
   p4/.style={invisible},
   p5/.style={invisible},
   p6/.style={invisible},
+  split/.style={rectangle split,rectangle split horizontal},
+  conn/.style={out=270,in=90}
 ]
 \only<2->{\tikzset{
   p1/.style={active},
@@ -46,12 +49,26 @@
 \only<13->{\tikzset{
   p6/.style={inactive},
 }}
-\node[draw,p1](z){$a_1b_1c_2d_1$}
-  child[p2]{node[draw]{$b_2$}}
+\node[draw,p1,split,rectangle split parts=4](p1){
+  $a_1$
+  \nodepart{two} $b_1$
+  \nodepart{three} $c_2$
+  \nodepart{four} $d_1$
+}
+  child[p2]{node(p2){$b_2$}}
   child[p3]{
-    node[draw]{$b_3c_3$}
-    child[p4]{node[draw]{$c_4$}}
+    node[split,rectangle split parts=2](p3){
+    $b_3$
+    \nodepart{two} $c_3$
+    }
+    child[p4]{node(p4){$c_4$}}
   }
-  child[p5]{node[draw]{$c_1$}}
-  child[p6]{node[draw]{$d_2$}};
+  child[p5]{node(p5){$c_1$}}
+  child[p6]{node(p6){$d_2$}};
+
+  \draw[conn,p2] (p1.one split south) to (p2.north);
+  \draw[conn,p3] (p1.one split south) to (p3.north);
+  \draw[conn,p5] (p1.two split south) to (p5.north);
+  \draw[conn,p6] (p1.three split south) to (p6.north);
+  \draw[conn,p4] (p3.one split south) to (p4.north);
 \end{tikzpicture}
