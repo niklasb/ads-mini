@@ -1,0 +1,87 @@
+\begin{columns}
+
+\tikzset{
+every child/.style={edge from parent/.style={draw=none}},
+subtree/.style={isosceles triangle,shape border rotate=90,yshift=-0.6cm},
+}
+\begin{column}{0.34\textwidth}
+\centering
+$\T$ \\[0.5em]
+\begin{tikzpicture}
+\node[circle,draw=red,thick](a1){$\delta_1$}
+  child{node[circle,draw=red,thick](a2){$\delta_2$}
+    child[subtree]{node[draw](b){b}}
+    child{node[circle,draw=red,thick](a3){$\delta_3$}
+      child{node[circle,thick,draw=red](a4){$\delta_4$}}
+      child{node[circle,draw](c){c}}
+    }
+  }
+  child[subtree]{node[draw](d){d}}
+  ;
+
+  \draw[draw=red,thick,color=red] (a1) to node [draw=none, midway, left, thick, yshift=0.2em] {\lstinline|0|} (a2);
+  \draw (a2) to node [draw=none, midway, left, yshift=0.2em] {\lstinline|0|} (b.north);
+  \draw[draw=red,thick,color=red] (a2) to node [draw=none, midway, right, yshift=0.2em] {\lstinline|1|} (a3);
+  \draw (a3) to node [draw=none, midway, right, yshift=0.2em] {\lstinline|1|} (c);
+  \draw (a1) to node [draw=none, midway, right, yshift=0.2em] {\lstinline|1|} (d.north);
+  \draw[draw=red,thick,color=red] (a3) to node [draw=none, midway, left, yshift=0.2em] {\lstinline|0|} (a4);
+\end{tikzpicture}
+\end{column}
+
+\begin{column}{0.6\textwidth}
+
+\centering
+$\T^c$ \\[1em]
+\begin{tikzpicture}[
+  every node/.style={rectangle,draw,black,text=black,thin},
+  every child/.style={edge from parent/.style={draw=none}, level distance = 1.25cm},
+  noedge/.style={edge from parent/.style={white}},
+  edge/.style={edge from parent/.style={black,thin,draw}},
+  conn/.style={},
+  subtree/.style={isosceles triangle,shape border rotate=90,yshift=-0.6cm},
+]
+\node[circle,inner sep=0,minimum size=1.5em,draw=red,thick](a){}
+  child{
+    node[subtree](b){b}
+  }
+  child{
+    node[circle](c){c}
+  }
+  child{
+    node[subtree](d){d}
+  }
+  ;
+
+  \draw[conn] (a) to node [draw=none, midway, above] {\lstinline|0|} (b.north);
+  \draw[conn] (a) to node [draw=none, midway, right] {\lstinline|1|} (c);
+  \draw[conn] (a) to node [draw=none, midway, above] {\lstinline|1|} (d.north);
+\end{tikzpicture}
+
+\centering
+
+\[ \begin{array}{lllllllllllll}
+L &=
+&\delta_1 &\tikzmark{aa}\text{\textbf{0}}
+&\delta_2 &\tikzmark{bb}\text{\textbf{1}}
+&\delta_3 &\tikzmark{cc}\text{\textbf{1}}
+\\
+\\
+BP &=
+&&\tikzmark{dd}\text{\lstinline|(|}
+&&\tikzmark{ee}\text{\lstinline|(|}
+&&\tikzmark{ff}\text{\lstinline|(|}
+&&\text{\lstinline|)|}
+\\
+Kind &=&&b&&c&&d
+\end{array}
+\]
+
+\begin{tikzpicture}[overlay,remember picture,-latex,shorten >=5pt]
+  \draw[distance=0.45cm,out=-10,in=130,yshift=1em,shorten <=5pt,shorten >=1pt] (aa.south) to (ff.north);
+  \draw[distance=0.45cm,out=200,in=70] (bb.south) to (dd.north);
+  \draw[distance=0.45cm,out=200,in=70] (cc.south) to (ee.north);
+\end{tikzpicture}
+
+\end{column}
+
+\end{columns}

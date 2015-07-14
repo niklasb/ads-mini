@@ -1,0 +1,36 @@
+\begin{columns}
+
+\begin{column}{0.34\textwidth}
+\centering
+\begin{tikzpicture}
+\node[circle,draw](z){$1$}
+  child{node[circle,draw]{$2$}
+    child{node[circle,draw]{$3$}}
+    child{node[circle,draw]{$4$}}
+  }
+  child{node[circle,draw]{$5$}}
+  child{node[circle,draw]{$6$}}
+  ;
+\end{tikzpicture}
+\end{column}
+
+\begin{column}{0.6\textwidth}
+
+\centering
+\[ \begin{array}{lllllllll}
+Knoten &=&&1&2&3&4&5 \\
+BP &=
+&\text{\lstinline|(|}
+&\text{\lstinline|((()|}
+&\text{\lstinline|(()|}
+&\text{\lstinline|)|}
+&\text{\lstinline|)|}
+&\text{\lstinline|)|}
+&\text{\lstinline|)|} \\
+Index &=&0&1&5&8&9&10&11
+\end{array}
+\]
+
+\end{column}
+
+\end{columns}

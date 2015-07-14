@@ -22,6 +22,7 @@
 \usepackage{tikz}
 \usepackage{listings}
 \usepackage[loadonly]{enumitem}
+\usepackage{hyperref}
 
 \usetikzlibrary{trees,shapes}
 
@@ -30,7 +31,11 @@
 
 
 \title{Pfadzerlegung zur Kompression von Tries}
-\subtitle{Niklas Baumstark -- \textit{niklas.baumstark@gmail.com}}
+\subtitle{
+``Fast Compressed Tries through Path Decompositions'',
+Grossi \& Ottaviano~\cite{tries} \\[1em]
+Vorgestellt von Niklas Baumstark -- \textit{niklas.baumstark@gmail.com}
+}
 
 
 \author{Niklas Baumstark}
@@ -42,8 +47,12 @@
 \KITfaculty{Fakultät für Informatik}
 
 \lstset{
-basicstyle=\ttfamily\small
+basicstyle=\ttfamily\normalsize
 }
+
+\newcommand{\tikzmark}[1]{\tikz[overlay,remember picture] \node (#1) {};}
+\newcommand\T{\mathcal{T}}
+
 
 % ----------------------------------------------------------------------
 \begin{document}
@@ -60,8 +69,6 @@ basicstyle=\ttfamily\small
   \maketitle
 \end{frame}
 
-
-\newcommand\T{\mathcal{T}}
 
 \begin{frame}{Pfadzerlegung}
 \begin{itemize}
@@ -105,9 +112,9 @@ $\T^c$\\[1em]
 \item Wie entscheiden, welcher Pfad der n"achste Knoten wird?
 \item Zwei grundlegende Taktiken
 \begin{itemize}
-\item Pfad zu linkestem Blatt im Baum
-\item Folge \emph{schweren Kanten}: Immer in den gr"o"sten Teilbaum absteigen
-$\rightarrow \T^c$ hat H"ohe $h = \mathcal{O}(\log |\T|)$
+\item Lexikografisch: Immer linkestes Kind w"ahlen
+\item Heavy-Light: Folge \emph{schweren Kanten} in gr"o"sten Teilbaum
+\\$\rightarrow \T^c$ hat H"ohe $h = \mathcal{O}(\log |\T|)$
 \end{itemize}
 \end{itemize}
 \end{frame}
@@ -123,6 +130,7 @@ $\rightarrow \T^c$ hat H"ohe $h = \mathcal{O}(\log |\T|)$
 \begin{column}{.48\textwidth}
 
 \centering
+$\T$ \\[1em]
 \input{trie1.tex}
 
 \end{column}%
@@ -130,6 +138,7 @@ $\rightarrow \T^c$ hat H"ohe $h = \mathcal{O}(\log |\T|)$
 \begin{column}{.48\textwidth}
 
 %\centering
+$\T^c$ \\
 \input{trie2.tex}
 
 \lstinline|remus| \\
@@ -144,12 +153,40 @@ $\rightarrow \T^c$ hat H"ohe $h = \mathcal{O}(\log |\T|)$
 
 \end{frame}
 
+\begin{frame}{DFUDS}
+\begin{itemize}
+\item \emph{Depth-first unary degree sequence}
+\item Kodiert Baum mit $2n$ Bits
+\item Sei $x$ Knoten mit $c$ Kindern
+\item Teilbaum $x$ wird kodiert als $c$ "offnende Klammern \lstinline|(| +
+schlie"sende Klammer \lstinline|)| + Kodierungen der Kindb"aume
+%\item Fast balanciert, bis auf \lstinline|)| der Wurzel. F"uge daher einzelnes
+%\lstinline|(| am Anfang ein
+\end{itemize}
+\vspace{1em}
+\input{dfuds.tex}
+\end{frame}
+
+\begin{frame}{DFUDS -- Operationen}
+
+\input{dfuds.tex}
+\vspace{1em}
+
+\begin{itemize}
+\item Finde $k$-tes Kind f"ur gegebenes $0 \le k < c$
+\begin{itemize}
+\item Finde $k - 1$-tes \lstinline|(| mit \lstinline|rank|/\lstinline|select|
+\item Finde zugeh"origes \lstinline|)| mit \lstinline|FindClose|
+\end{itemize}
+\end{itemize}
+\end{frame}
+
 \begin{frame}{Trie-Repr"asentation}
 
 \begin{itemize}
 
-\item Repr"asentiere Baumstruktur von $T^c$ als \emph{depth-first unary degree sequence} (DFUDS)
-\item F"uge spezielle Splitter-Buchstaben in Knotenlabels ein
+\item Repr"asentiere Baumstruktur von $\T^c$ als DFUDS
+\item F"uge spezielle Splitter-Zeichen in Knotenlabels ein
 \end{itemize}
 
 \centering
@@ -158,19 +195,19 @@ $\rightarrow \T^c$ hat H"ohe $h = \mathcal{O}(\log |\T|)$
 
 \end{frame}
 
-\begin{frame}{Lookup}
+\begin{frame}
 \centering
 \input{trie3.tex}
 \input{trie4.tex}
 
 \begin{itemize}
-\item Gegeben Zeichenkette $S$, finde Position von $S$ im zerlegten Trie $T^c$
+\item Gegeben Zeichenkette $P$, finde Position von $P$ im zerlegten Trie $T^c$
 \item Algorithmus:
 \begin{itemize}
 \item Scanne Label der Wurzel bis zum ersten Mismatch eines branching characters.
 Sei $n$ die Summe vorhergehender Splitter und $m$ der aktuelle Splitter.
 \item Bin"arsuche in $B[n+1 \ldots n+m]$, um richtiges Kind zu finden
-\item $i$-tes Kind beginnt bei $\text{\lstinline|FindClose|}(BP, i - 1) + 1$
+\item Rekursiv fortfahren
 \end{itemize}
 
 \end{itemize}
@@ -179,22 +216,47 @@ Sei $n$ die Summe vorhergehender Splitter und $m$ der aktuelle Splitter.
 \begin{frame}
 \begin{block}{Lookup}
 \begin{itemize}
-\item Laufzeit $\mathcal{O}\left(|S| + h\log |\Sigma|\right)$
+\item Laufzeit $\mathcal{O}\left(|P| + h\log |\Sigma|\right)$
 \item Nur $h$ beliebige Zugriffe auf $L$, ansonsten sequentiell
-\item[$\implies$] Sehr effektive Kompression m"oglich
+\item[$\implies$] Sehr cache-effizient, effektive Kompression m"oglich
 \end{itemize}
 \end{block}
 
 \begin{block}{Weitere Anwendungen}
 \begin{itemize}
-\item Monotone Minimal Perfect Hashing
-\begin{itemize}
-\item \emph{Blind trie}: Nur branching characters werden gespeichert, keine kompletten Labels
-\item Spezielle Variante von Heavy-Light-Zerlegung die lexikographische Ordnung erh"alt
-\item Laufzeit $\mathcal{O}\left(\min(|S|, h)\right)$
-\end{itemize}
+\item Minimal Perfect Hashing: Labels (bis auf branching characters) weglassen, daf"ur
+Tiefendeltas speichern. Strings werden abgebildet auf Knotennummer
+\item Bei lexikografischer Zerlegung sogar monoton
+%\item Tiefengarantie auch m"oglich
+%\begin{itemize}
+%\item Spezielle Variante von Heavy-Light-Zerlegung die lexikographische Ordnung erh"alt
+%\item Laufzeit $\mathcal{O}\left(\min(|P|, \log n \cdot \log |\Sigma|)\right)$
+%\end{itemize}
 \end{itemize}
 \end{block}
+\end{frame}
+
+\begin{frame}{Heavy-Light-Zerlegung mit lexikografischen Ordnung}
+\begin{itemize}
+\item Kodiere Alphabet bin"ar, $\log |\Sigma|$ Bits pro Zeichen
+\item Konkateniere Kindb"aume in lexikografischer Ordnung
+\end{itemize}
+
+\input{lexi1.tex}
+\end{frame}
+
+\begin{frame}{Heavy-Light-Zerlegung mit lexikografischen Ordnung}
+\begin{itemize}
+\item Lookup wie zuvor, allerdings ist Knotennummer nicht lexikografischer Rang
+\item Ziehe "ubersprungene linke Teilb"aume ab
+\item Laufzeit $\mathcal{O}(\min\{|P|, \log n \cdot \log |\Sigma|\})$
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Referenzen}
+\bibliographystyle{abbrv}
+\bibliography{references}
 \end{frame}
 
 \end{document}
