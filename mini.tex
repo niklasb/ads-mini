@@ -73,15 +73,16 @@ basicstyle=\ttfamily\normalsize
 \begin{frame}{Pfadzerlegung}
 \begin{itemize}
 \item Anwendbar auf beliebigen Baum $\T$
-\item Erzeuge neuen Baum $\T^c$. Knoten in $\T^c$ sind Pfade in $\T$
-\item Konstruktion:
-\begin{enumerate}
-\item W"ahle Pfad $p$ von Wurzel zu einem Blatt
-\item Entferne $p$
-\item Berechne rekursiv Dekompositionen $\T^c_1, \T^c_2, \ldots, \T^c_n$ der "ubrigen Teilb"aume,
-geordnet nach Level der Teilbaumwurzel in $T$
-\item $\T^c$ hat Wurzel $p$ mit Kindern $\T^c_1, \ldots, \T^c_n$.
-\end{enumerate}
+\item Erzeuge neuen Baum $\T^c$
+\item Knoten in $\T^c$ sind Pfade in $\T$
+%\item Konstruktion:
+%\begin{enumerate}
+%\item W"ahle Pfad $p$ von Wurzel zu einem Blatt
+%\item Entferne $p$
+%\item Berechne rekursiv Dekompositionen $\T^c_1, \T^c_2, \ldots, \T^c_n$ der "ubrigen Teilb"aume,
+%geordnet nach Level der Teilbaumwurzel in $T$
+%\item $\T^c$ hat Wurzel $p$ mit Kindern $\T^c_1, \ldots, \T^c_n$.
+%\end{enumerate}
 \end{itemize}
 \end{frame}
 
@@ -102,6 +103,18 @@ $\T$\\[1em]
 $\T^c$\\[1em]
 \input{decomp2.tex}
 
+\begin{enumerate}
+\onslide<2->{
+  \item W"ahle Pfad $p$ von Wurzel zu einem Blatt
+}
+\onslide<3->{
+  \item Entferne $p$
+}
+\onslide<4->{
+  \item Berechne rekursiv Dekomposition der Teilb"aume
+}
+\end{enumerate}
+
 \end{column}%
 \end{columns}
 
@@ -109,7 +122,7 @@ $\T^c$\\[1em]
 
 \begin{frame}{Pfadzerlegung}
 \begin{itemize}
-\item Wie entscheiden, welcher Pfad der n"achste Knoten wird?
+\item Wie entscheiden, welcher Pfad zu w"ahlen ist?
 \item Zwei grundlegende Taktiken
 \begin{itemize}
 \item Lexikografisch: Immer linkestes Kind w"ahlen
@@ -157,7 +170,7 @@ $\T^c$ \\
 \begin{itemize}
 \item \emph{Depth-first unary degree sequence}
 \item Kodiert Baum mit $2n$ Bits
-\item Sei $x$ Knoten mit $c$ Kindern
+\item Betrachte Knoten $x$ mit $c$ Kindern
 \item Teilbaum $x$ wird kodiert als $c$ "offnende Klammern \lstinline|(| +
 schlie"sende Klammer \lstinline|)| + Kodierungen der Kindb"aume
 %\item Fast balanciert, bis auf \lstinline|)| der Wurzel. F"uge daher einzelnes
@@ -206,7 +219,7 @@ schlie"sende Klammer \lstinline|)| + Kodierungen der Kindb"aume
 \begin{itemize}
 \item Scanne Label der Wurzel bis zum ersten Mismatch eines branching characters.
 Sei $n$ die Summe vorhergehender Splitter und $m$ der aktuelle Splitter.
-\item Bin"arsuche in $B[n+1 \ldots n+m]$, um richtiges Kind zu finden
+\item Bin"arsuche in $B[n \ldots n+m-1]$, um richtiges Kind zu finden
 \item Rekursiv fortfahren
 \end{itemize}
 
